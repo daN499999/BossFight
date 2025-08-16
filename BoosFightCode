@@ -137,16 +137,16 @@ while hp2 > 0 and hp > 0:
     if hp2 > 0:
         print('--- Boss Turn ---')
         x=random.randint(level+1, level + 3)
-        d2 = random.randint(0, x)
+        d2 = random.randint(1, x)
         crit_chance_boss = random.randint(15, 25)
-        if d2 > 0 and random.randint(1, 100) <= crit_chance_boss and hp > 5:
+        if d2 > 0 and random.randint(1, 100) <= crit_chance_boss:
             d2 *= 2
             print("Boss landed a CRITICAL HIT!")
         total_d = max(d2 - armor, 0)
         hp -= total_d
         hp = max(hp, 0)
 
-        if random.randint(1, 100) <= random.randint(10, 25) and hp > 7:
+        if random.randint(1, 100) <= random.randint(10, 25):
             poison_turns += 3
             print("The Boss has poisoned you! Extra damage for 3 rounds!")
 
