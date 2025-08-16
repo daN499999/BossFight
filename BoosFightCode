@@ -8,7 +8,7 @@ poison_turns = 0
 poison_antidote = 0
 secret_candy = 0
 curse_turns = 0
-talisman = 0  # Added talisman stat
+talisman = 0  # 
 
 # --- Boss stats ---
 hp2 = random.randint(15, 22)
@@ -51,10 +51,8 @@ print(f'HP = {hp}, Damage = {damage}, Armor = {armor}')
 # --- Fight loop ---
 while hp2 > 0 and hp > 0:
     print(f'--- Player Turn (Round {round_num}) ---')
-
-    curse_num = None  # אתחול המשתנה למניעת שגיאות
-
-    # Poison effect
+    
+    # --- Poison effect ---
     if poison_turns > 0 and poison_antidote == 0:
         dmg = random.randint(1, 2)
         hp -= dmg
@@ -62,28 +60,27 @@ while hp2 > 0 and hp > 0:
         poison_turns -= 1
         print(f'Oh no! You are poisoned! Took {dmg} damage. HP = {hp}')
     
-    # Curse effect
-    if curse_turns > 0:
-        if talisman == 0:
-            curse_num = random.randint(1, 3)
-            if curse_num == 1:
-                damage -= 1
-                print(f'Oh no! You are cursed! -1 damage this round, damage = {damage}') 
-            elif curse_num == 2:
-                armor -= 1
-                print(f'Oh no! You are cursed! -1 armor this round, armor = {armor}') 
-            elif curse_num == 3:
-                potion2 = potion
-                potion = 0
-                print(f'Oh no! You are cursed! You cant use potions this round') 
-            curse_turns -= 1
-        elif talisman == 2:
-            hp2 -= 2
-            print(f'Yess! the boss tried to curse you but got cursed himself')
-            print(f'The boss took -2 HP')  
-            curse_turns -= 1
+    # --- Curse effect ---
+    curse_num_temp = None  # משתנה זמני לשמירת סוג הקללה של השחקן
+    potion_temp = potion    # שמירה זמנית של הפוטיונים
+    if curse_turns > 0 and talisman == 0:
+        curse_num_temp = random.randint(1, 3)
+        if curse_num_temp == 1:
+            damage -= 1
+            print(f'Oh no! You are cursed! -1 damage this round, damage = {damage}')
+        elif curse_num_temp == 2:
+            armor -= 1
+            print(f'Oh no! You are cursed! -1 armor this round, armor = {armor}')
+        elif curse_num_temp == 3:
+            potion_temp = potion
+            potion = 0
+            print(f'Oh no! You are cursed! You cant use potions this round')
+    elif curse_turns > 0 and talisman >= 2:
+        hp2 -= 2
+        print(f'Yess! the boss tried to curse you but got cursed himself')
+        print(f'The boss took -2 HP')  
 
-    # Player action
+    # --- Player action ---
     print('Choose your action:')
     print(f'1. Heal with a potion (+3 HP) | You have {hp} HP and {potion} potions')
     print('2. Attack')
@@ -271,7 +268,6 @@ while hp2 > 0 and hp > 0:
                     potion += 1
                     print('You found another sacred talisman ! +2 armor, +1 Jelly Belly Candy, +1 potion') 
                     print('Every time the boss uses Curse technique, you curse him !')
-
             else:
                 hp -= 2
                 hp = max(hp, 0)
@@ -283,18 +279,18 @@ while hp2 > 0 and hp > 0:
     level += 1
     if hp > 0:
         hp += 1
-        print(f'\n--- End of Round {round_num} ---')
+        print(f'--- End of Round {round_num} ---')
         print(f'You gained +1 HP')
         print(f'Your stats: HP = {hp}, Damage = {damage}, Armor = {armor}')
         print(f'Boss HP = {hp2}')
-        # Restore stats after curse if applicable
-        if curse_turns > 0 and curse_num is not None:
-            if curse_num == 1:
+        # --- שחזור הקללה ---
+        if curse_turns > 0 and talisman == 0:
+            if curse_num_temp == 1:
                 damage += 1
-            elif curse_num == 2:
+            elif curse_num_temp == 2:
                 armor += 1
-            elif curse_num == 3:
-                potion = potion2
+            elif curse_num_temp == 3:
+                potion = potion_temp  # שחזור הפוטיונים
 
 # --- End of game ---
 if hp > 0:
