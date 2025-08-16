@@ -62,7 +62,7 @@ while hp2 > 0 and hp > 0:
 
     # Player action
     print('Choose your action:')
-    print(f'1. Heal with a potion (+3 HP) , You have {hp} HP, {potion} HP')
+    print(f'1. Heal with a potion (+3 HP) , You have {hp} HP and {potion} potions')
     print('2. Attack')
     print('3. Run away')
     print(f'4. Eat secret candy , You have {secret_candy} secret candy')
