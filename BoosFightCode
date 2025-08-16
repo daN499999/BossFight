@@ -11,7 +11,7 @@ secret_candy = 0
 # --- Boss stats ---
 hp2 = random.randint(15, 22)
 d2_base = random.randint(2, 3)
-print(f'The boss hp is: {hp2}')
+print(f'The boss HP is: {hp2}')
 
 # --- Player stats ---
 hp = random.randint(9, 11)
@@ -21,13 +21,13 @@ armor = random.randint(0, 1)
 print(f'Round number: {round_num}')
 print('Howdy, lets fight this boss!!')
 print('Starting stats:')
-print(f'hp = {hp}, damage = {damage}, armor = {armor}')
+print(f'HP = {hp}, Damage = {damage}, Armor = {armor}, Potions = {potion}')
 
 # --- Choose starting item ---
 print('What item do you want to start with?')
-print('1. Heal potion (+3 hp)')
-print('2. +1 damage boost')
-print('3. +1 armor')
+print('1. Heal Potion (+3 HP)')
+print('2. +1 Damage Boost')
+print('3. +1 Armor')
 
 num = 0
 while num not in [1, 2, 3]:
@@ -44,7 +44,7 @@ while num not in [1, 2, 3]:
         print("Invalid choice. Try again.")
 
 print('Stats after item:')
-print(f'hp = {hp}, damage = {damage}, armor = {armor}')
+print(f'HP = {hp}, Damage = {damage}, Armor = {armor}')
 
 # --- Fight loop ---
 while hp2 > 0 and hp > 0:
@@ -54,15 +54,16 @@ while hp2 > 0 and hp > 0:
     if poison_turns > 0 and poison_antidote == 0:
         dmg = random.randint(1, 2)
         hp -= dmg
+        hp = max(hp, 0)
         poison_turns -= 1
         print(f'Oh no! You are poisoned! Took {dmg} damage. HP = {hp}')
 
     # Player action
     print('Choose your action:')
-    print(f'1. Heal with a potion (+3 HP) , You have {hp} HP and {potion} potions')
+    print(f'1. Heal with a potion (+3 HP) | You have {hp} HP and {potion} potions')
     print('2. Attack')
     print('3. Run away')
-    print(f'4. Eat secret candy , You have {secret_candy} secret candy')
+    print(f'4. Eat Jelly Belly Candy | You have {secret_candy} candies')
 
     num = 0
     while num not in [1, 2, 3, 4]:
@@ -80,7 +81,7 @@ while hp2 > 0 and hp > 0:
         if potion > 0:
             hp += 3
             potion -= 1
-            print(f'You healed! HP = {hp}, potions left = {potion}')
+            print(f'You healed! HP = {hp}, Potions left = {potion}')
         else:
             print("No potions left! You lose your turn.")
     elif num == 4:
@@ -89,34 +90,37 @@ while hp2 > 0 and hp > 0:
             if C == 1:
                 x = random.randint(1, 2)
                 damage += x
-                print(f'+{x} Damage up! Your damage: {damage}')
+                print(f'+{x} Damage up! Your Damage = {damage}')
             elif C == 2:
                 x = random.randint(1, 2)
                 armor += x
-                print(f'+{x} Armor up! Your armor: {armor}')
+                print(f'+{x} Armor up! Your Armor = {armor}')
             elif C == 3:
                 hp += 4
-                print(f'+4 HP up! Your HP: {hp}')
+                print(f'+4 HP up! Your HP = {hp}')
             elif C == 4:
                 hp -= 2
-                print(f'-2 HP down! Your HP: {hp}')
+                hp = max(hp, 0)
+                print(f'-2 HP down! Your HP = {hp}')
             elif C == 5:
                 x = random.randint(1, 2)
                 if x == 1:
                     armor -= 1
-                    print(f'-1 Armor down! Your armor: {armor}')
+                    armor = max(armor, 0)
+                    print(f'-1 Armor down! Your Armor = {armor}')
                 else:
                     print('You got nothing!')
             elif C == 6:
                 x = random.randint(1, 2)
                 if x == 1:
                     damage -= 1
-                    print(f'-1 Damage down! Your damage: {damage}')
+                    damage = max(damage, 0)
+                    print(f'-1 Damage down! Your Damage = {damage}')
                 else:
                     print('You got nothing!')
             secret_candy -= 1
         else:
-            print("No secret candy left!")
+            print("No Jelly Belly Candy left!")
     elif num == 2:
         crit_chance_player = 25
         attack_dmg = damage
@@ -130,23 +134,27 @@ while hp2 > 0 and hp > 0:
             print('You defeated the boss!')
             break
 
-    # --- Boss turn ---
+    # --- Boss Turn ---
     if hp2 > 0:
         print('--- Boss Turn ---')
         d2 = random.randint(1, max(1, level + d2_base))
         d2 = min(d2, 5)
-        if random.randint(1, 100) <= 10:  # crit chance
+
+        if round_num % 5 == 0:
+            d2 += 3
+            print("Boss landed a SPECIAL HIT!")
+        elif random.randint(1, 100) <= 10:
             d2 += 2
             print("Boss landed a CRITICAL HIT!")
+
         total_d = max(d2 - armor, 0)
         hp -= total_d
         hp = max(hp, 0)
+        print(f'The boss dealt {total_d} damage. Your HP = {hp}')
 
         if random.randint(1, 100) <= 15:
             poison_turns += 2
             print("The Boss has poisoned you! Extra damage for 2 rounds!")
-
-        print(f'The boss dealt {total_d} damage. Your HP = {hp}')
 
         boss_heal = random.randint(0, 2)
         hp2 += boss_heal
@@ -155,10 +163,10 @@ while hp2 > 0 and hp > 0:
     # --- Treasure reward ---
     if hp > 0:
         print('You found a treasure! Choose your gift:')
-        print('1. Heal potion')
-        print('2. + random attack')
-        print('3. + random armor')
-        print('4. Secret candy')
+        print('1. Heal Potion')
+        print('2. Excalibur Sword (+Damage)')
+        print('3. Champion Shield (+Armor)')
+        print('4. Jelly Belly Candy')
 
         num = 0
         while num not in [1, 2, 3, 4]:
@@ -170,54 +178,69 @@ while hp2 > 0 and hp > 0:
 
         if num == 1:
             potion += 1
-            print(f'You got a heal potion! Potions = {potion}')
+            print(f'You got a Heal Potion! Potions = {potion}')
         elif num == 2:
             add_attack = random.randint(1, 3)
             damage += add_attack
-            print(f'Your attack leveled up! Damage = {damage}')
+            print(f'Excalibur Sword! Damage +{add_attack}, Total = {damage}')
         elif num == 3:
             add_armor = random.randint(1, 3)
             armor += add_armor
-            print(f'Your armor leveled up! Armor = {armor}')
+            print(f'Champion Shield! Armor +{add_armor}, Total = {armor}')
         elif num == 4:
             secret_candy += 1
-            print(f'You got a secret candy! Secret candy = {secret_candy}')
+            print(f'You got Jelly Belly Candy! Candies = {secret_candy}')
 
-    # --- Secret room ---
+    # --- Secret room with 2 doors ---
     if random.randint(1, 100) <= random.randint(30, 40):
-        print('You found a secret room! Enter?')
-        inp = input('1. Yes, 2. No: ').strip()
-        if inp == "1":
-            reward = random.randint(1, 5)
-            if reward == 1:
-                poison_antidote += 1
-                print('You got a poison antidote! Immune now!')
-            elif reward == 2:
-                add_attack = random.randint(2, 4)
-                damage += add_attack
-                print(f'Champion sword! Damage increased by {add_attack}. Total = {damage}')
-            elif reward == 3:
-                armor += 3
-                print(f'Zeos armor! Armor +3. Total = {armor}')
-            elif reward == 4:
-                potion += 2
-                print(f'Aphrodite kiss! You got 2 potions. Total = {potion}')
-            elif reward == 5:
+        print('You found a secret room! Choose a door:')
+        inp = input('1. Door 1, 2. Door 2: ').strip()
+        if inp in ["1", "2"]:
+            good_door = random.randint(1, 2)
+            if int(inp) == good_door:
+                reward = random.randint(1, 5)
+                if reward == 1:
+                    potion += 2
+                    print('Aphrodite Kiss! You got 2 potions! Potions =', potion)
+                elif reward == 2:
+                    add_attack = random.randint(1, 3)
+                    damage += add_attack
+                    print(f'Excalibur Sword! Damage +{add_attack}, Total = {damage}')
+                elif reward == 3:
+                    add_armor = random.randint(1, 3)
+                    armor += add_armor
+                    print(f'Champion Shield! Armor +{add_armor}, Total = {armor}')
+                elif reward == 4:
+                    secret_candy += 2
+                    print(f'Jelly Belly Candy! Candies = {secret_candy}')
+                elif reward == 5 and poison_antidote == 0:
+                    poison_antidote += 1
+                    print('You found vempire blood and decided to drink it ! You are immune to poison now!')
+                elif reward == 5 and poison_antidote == 1:
+                    damage +=4
+                    armor +=2
+                    hp -=3
+                    print('You found vempire blood again and decided to drink it ! You became a vempire')
+                    print('You got +4 damage, +2 armor, but due to a sunburns -3 HP')
+                    print(f'Your stats: HP = {hp}, Damage = {damage}, Armor = {armor}')
+            else:
                 hp -= 2
-                print(f'It was a trap! -2 HP. HP = {hp}')
+                hp = max(hp, 0)
+                bad_outcomes = ["Mimic Chest", "Rotten Candy", "Cursed Box", "Slime Trap"]
+                print(f'You found a {random.choice(bad_outcomes)}! -2 HP. HP = {hp}')
 
     # --- End of round stats ---
     round_num += 1
     level += 1
     if hp > 0:
         hp += 1
-        print(f'--- End of Round {round_num} ---')
+        print(f'\n--- End of Round {round_num} ---')
         print(f'You gained +1 HP')
         print(f'Your stats: HP = {hp}, Damage = {damage}, Armor = {armor}')
         print(f'Boss HP = {hp2}')
 
 # --- End of game ---
 if hp > 0:
-    print('Congratulations! You won the battle!')
+    print('\nCongratulations! You won the battle!')
 else:
-    print('Game Over! Better luck next time!')
+    print('\nGame Over! Better luck next time!')
