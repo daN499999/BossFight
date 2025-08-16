@@ -51,16 +51,11 @@ while hp2 > 0 and hp > 0:
     print(f'--- Player Turn (Round {round_num}) ---')
 
     # Poison effect
-    if poison_turns > 0:
-        if poison_antidote == 0:
-            dmg = random.randint(1, 2)
-            hp -= dmg
-            poison_turns -= 1
-            print(f'Oh no! You are poisoned! Took {dmg} damage.')
-            print(f'HP = {hp}, potions left = {potion}')
-        else:
-            print('The poison does not affect you!')
-            poison_turns = 0
+    if poison_turns > 0 and poison_antidote == 0:
+        dmg = random.randint(1, 2)
+        hp -= dmg
+        poison_turns -= 1
+        print(f'Oh no! You are poisoned! Took {dmg} damage. HP = {hp}')
 
     # Player action
     print('Choose your action:')
@@ -138,23 +133,21 @@ while hp2 > 0 and hp > 0:
     # --- Boss turn ---
     if hp2 > 0:
         print('--- Boss Turn ---')
-        d2 = level + random.randint(1, d2_base)
-        crit_chance_boss = 10 # 10%
-        if d2 > 0 and random.randint(1, 100) <= crit_chance_boss:
+        d2 = random.randint(1, max(1, level + d2_base))
+        d2 = min(d2, 5)
+        if random.randint(1, 100) <= 10:  # crit chance
             d2 += 2
             print("Boss landed a CRITICAL HIT!")
         total_d = max(d2 - armor, 0)
         hp -= total_d
         hp = max(hp, 0)
 
-        # Boss poison
         if random.randint(1, 100) <= 15:
             poison_turns += 2
             print("The Boss has poisoned you! Extra damage for 2 rounds!")
 
         print(f'The boss dealt {total_d} damage. Your HP = {hp}')
 
-        # Boss heal
         boss_heal = random.randint(0, 2)
         hp2 += boss_heal
         print(f'The boss regenerates {boss_heal} HP! Boss HP = {hp2}')
@@ -191,11 +184,11 @@ while hp2 > 0 and hp > 0:
             print(f'You got a secret candy! Secret candy = {secret_candy}')
 
     # --- Secret room ---
-    if random.randint(1, 100) <= random.randint(25, 40):
+    if random.randint(1, 100) <= random.randint(30, 40):
         print('You found a secret room! Enter?')
         inp = input('1. Yes, 2. No: ').strip()
         if inp == "1":
-            reward = random.randint(1, 4)
+            reward = random.randint(1, 5)
             if reward == 1:
                 poison_antidote += 1
                 print('You got a poison antidote! Immune now!')
@@ -209,15 +202,19 @@ while hp2 > 0 and hp > 0:
             elif reward == 4:
                 potion += 2
                 print(f'Aphrodite kiss! You got 2 potions. Total = {potion}')
+            elif reward == 5:
+                hp -= 2
+                print(f'It was a trap! -2 HP. HP = {hp}')
 
     # --- End of round stats ---
     round_num += 1
     level += 1
-    hp += 1
-    print(f'--- End of Round {round_num} ---')
-    print(f'You gained +1 HP')
-    print(f'Your stats: HP = {hp}, Damage = {damage}, Armor = {armor}')
-    print(f'Boss HP = {hp2}')
+    if hp > 0:
+        hp += 1
+        print(f'--- End of Round {round_num} ---')
+        print(f'You gained +1 HP')
+        print(f'Your stats: HP = {hp}, Damage = {damage}, Armor = {armor}')
+        print(f'Boss HP = {hp2}')
 
 # --- End of game ---
 if hp > 0:
