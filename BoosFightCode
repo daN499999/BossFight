@@ -136,8 +136,9 @@ while hp2 > 0 and hp > 0:
     # --- Boss turn ---
     if hp2 > 0:
         print('--- Boss Turn ---')
-        d2 = random.randint(0, random.randint(level, level + 3))
-        crit_chance_boss = random.randint(10, 25)
+        x=random.randint(level+1, level + 3)
+        d2 = random.randint(0, x)
+        crit_chance_boss = random.randint(15, 25)
         if d2 > 0 and random.randint(1, 100) <= crit_chance_boss and hp > 5:
             d2 *= 2
             print("Boss landed a CRITICAL HIT!")
